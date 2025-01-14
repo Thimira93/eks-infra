@@ -1,0 +1,22 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: httpd
+  namespace: 6-example
+  annotations:
+    alb.ingress.kubernetes.io/scheme: internet-facing  # ALB should be publicly accessible
+    alb.ingress.kubernetes.io/target-type: ip          # Target the pods directly via IP
+    alb.ingress.kubernetes.io/healthcheck-path: / # Health check path for ALB
+spec:
+  ingressClassName: alb  # ALB ingress controller
+  rules:
+    - host: ex6.antonputra.com  # Set your domain name here
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: httpd
+                port:
+                  number: 80
